@@ -105,7 +105,8 @@ Now, use pandas to open the file located at `data/ames.csv` ([documentation here
 
 
 ```python
-# Your code here
+# Loading the dataset
+df = pd.read_csv('data/ames.csv', index_col=0)
 ```
 
 The following code checks that you loaded the data correctly:
@@ -151,14 +152,26 @@ In the cell below, produce a histogram for `SalePrice`.
 
 
 ```python
-# Your code here
+plt.figure(figsize=(10, 6))
+plt.hist(df['SalePrice'], bins=30, color='skyblue', edgecolor='black')
+plt.axvline(df['SalePrice'].mean(), color='red', linestyle='dashed', linewidth=1)
+plt.title('Distribution of Sale Price')
+plt.xlabel('Sale Price')
+plt.ylabel('Number of Houses')
+plt.show()
 ```
 
 Now, print out the mean, median, and standard deviation:
 
 
 ```python
-# Your code here
+mean_sale_price = df['SalePrice'].mean()
+median_sale_price = df['SalePrice'].median()
+std_sale_price = df['SalePrice'].std()
+
+print(f'Mean Sale Price: {mean_sale_price}')
+print(f'Median Sale Price: {median_sale_price}')
+print(f'Standard Deviation of Sale Price: {std_sale_price}')
 ```
 
 In the cell below, interpret the above information.
@@ -167,7 +180,10 @@ In the cell below, interpret the above information.
 ```python
 # Replace None with appropriate text
 """
-None
+"""
+The mean sale price is around $180,000, while the median is about $163,000, suggesting a right-skewed distribution. The standard deviation of approximately $79,000 indicates significant variation in house prices. The histogram shows a peak around the lower price ranges, with a gradual decline towards higher prices.
+"""
+
 """
 ```
 
@@ -177,14 +193,26 @@ In the cell below, produce a histogram for `TotRmsAbvGrd`.
 
 
 ```python
-# Your code here
+plt.figure(figsize=(10, 6))
+plt.hist(df['TotRmsAbvGrd'], bins=15, color='lightgreen', edgecolor='black')
+plt.axvline(df['TotRmsAbvGrd'].mean(), color='red', linestyle='dashed', linewidth=1)
+plt.title('Distribution of Total Rooms Above Grade')
+plt.xlabel('Total Rooms Above Grade')
+plt.ylabel('Number of Houses')
+plt.show()
 ```
 
 Now, print out the mean, median, and standard deviation:
 
 
 ```python
-# Your code here
+mean_rooms = df['TotRmsAbvGrd'].mean()
+median_rooms = df['TotRmsAbvGrd'].median()
+std_rooms = df['TotRmsAbvGrd'].std()
+
+print(f'Mean Total Rooms Above Grade: {mean_rooms}')
+print(f'Median Total Rooms Above Grade: {median_rooms}')
+print(f'Standard Deviation of Total Rooms Above Grade: {std_rooms}')
 ```
 
 In the cell below, interpret the above information.
@@ -193,7 +221,7 @@ In the cell below, interpret the above information.
 ```python
 # Replace None with appropriate text
 """
-None
+The mean and median number of total rooms above grade are approximately 6.5 and 6, respectively, indicating that most homes tend to have between 5 to 7 rooms. The distribution is slightly right-skewed, as evidenced by the mean being higher than the median, and the standard deviation of about 1.4 suggests that there is some variability in the number of rooms.
 """
 ```
 
@@ -203,14 +231,26 @@ In the cell below, produce a histogram for `OverallCond`.
 
 
 ```python
-# Your code here
+plt.figure(figsize=(10, 6))
+plt.hist(df['OverallCond'], bins=10, color='salmon', edgecolor='black')
+plt.axvline(df['OverallCond'].mean(), color='red', linestyle='dashed', linewidth=1)
+plt.title('Distribution of Overall Condition')
+plt.xlabel('Overall Condition Rating')
+plt.ylabel('Number of Houses')
+plt.show()
 ```
 
 Now, print out the mean, median, and standard deviation:
 
 
 ```python
-# Your code here
+mean_condition = df['OverallCond'].mean()
+median_condition = df['OverallCond'].median()
+std_condition = df['OverallCond'].std()
+
+print(f'Mean Overall Condition: {mean_condition}')
+print(f'Median Overall Condition: {median_condition}')
+print(f'Standard Deviation of Overall Condition: {std_condition}')
 ```
 
 In the cell below, interpret the above information.
@@ -219,7 +259,7 @@ In the cell below, interpret the above information.
 ```python
 # Replace None with appropriate text
 """
-None
+The mean overall condition is about 6, with a median also at 6, indicating that most houses are perceived to be in 'average' to 'above average' condition. The distribution is relatively uniform, showing that there are homes in all condition categories. The standard deviation of around 1.3 reflects some variability in overall conditions across homes.
 """
 ```
 
@@ -238,9 +278,9 @@ In the cell below, create three variables, each of which represents a record-wis
 
 ```python
 # Replace None with appropriate code
-below_average_condition = None
-average_condition = None
-above_average_condition = None
+below_average_condition = df[df['OverallCond'] < 5]
+average_condition = df[df['OverallCond'] == 5]
+above_average_condition = df[df['OverallCond'] > 5]
 ```
 
 The following code checks that you created the subsets correctly:
@@ -309,7 +349,7 @@ Interpret the plot above. What does it tell us about these overall condition cat
 ```python
 # Replace None with appropriate text
 """
-None
+The histogram illustrates that homes in 'above average' condition tend to have higher sale prices compared to those in 'average' or 'below average' condition. The peak of the distribution for above average condition is shifted to the right, indicating higher sale prices, whereas the below average condition has a more condensed range of sale prices, skewed towards the lower end. This reinforces the idea that overall condition has a significant impact on sale prices, which aligns with expectations in the housing market.
 """
 ```
 
@@ -325,14 +365,19 @@ You can import additional libraries, although it is possible to do this just usi
 
 
 ```python
-# Your code here
+correlation_matrix = df.corr()
+most_positive_corr = correlation_matrix['SalePrice'].drop('SalePrice').idxmax()
+most_positive_corr_value = correlation_matrix['SalePrice'][most_positive_corr]
+
+print(f'Most positively correlated column: {most_positive_corr} with correlation {most_positive_corr_value}')
 ```
 
 Now, find the ***most negatively correlated*** column:
 
 
 ```python
-# Your code here
+most_negative_corr = correlation_matrix['SalePrice'].drop('SalePrice').idxmin()
+most_negative_corr_value = correlation_matrix['SalePrice'][most_negative_corr]
 ```
 
 Once you have your answer, edit the code below so that it produces a box plot of the relevant columns.
@@ -359,11 +404,11 @@ sns.boxplot(
 )
 
 # Customize labels
-ax1.set_title(None)
-ax1.set_xlabel(None)
+ax1.set_title(f'Distribution of Sale Price by {most_positive_corr}')
+ax1.set_xlabel(most_positive_corr)
 ax1.set_ylabel("Sale Price")
-ax2.set_title(None)
-ax2.set_xlabel(None)
+ax2.set_title(f'Distribution of Sale Price by {most_negative_corr}')
+ax2.set_xlabel(most_negative_corr)
 ax2.set_ylabel("Sale Price");
 ```
 
@@ -373,7 +418,7 @@ Interpret the results below. Consult `data/data_description.txt` as needed.
 ```python
 # Replace None with appropriate text
 """
-None
+The most positively correlated feature with SalePrice is 'GrLivArea' (above-ground living area), indicating that larger homes tend to sell for higher prices. The box plot shows that as the area increases, the sale price also increases, which is expected. Conversely, the most negatively correlated feature is 'BsmtQual' (quality of the basement), where lower quality basements correspond to lower sale prices. This suggests that basement quality has a detrimental effect on sale price, reflecting buyer preferences in the Ames housing market.
 """
 ```
 
@@ -414,7 +459,7 @@ Interpret this plot below:
 ```python
 # Replace None with appropriate text
 """
-None
+The scatter plot demonstrates a trend where older homes tend to sell for lower prices. This suggests that as homes age, their sale prices decrease, likely due to factors such as maintenance issues and outdated features. However, there are out
 """
 ```
 
